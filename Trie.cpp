@@ -21,13 +21,11 @@ Trie::~Trie() {
 void Trie::clear(Node *node) {
     
     for(int i = 0; i < 26; i++) {
-        if(node->children[i] != NULL)
-            clear(node->children[i]);
+        if(node->getChildren()[i] != NULL)
+            clear(node->getChildren()[i]);
     }
-    delete[] node->children;
-    node->children = NULL;
+    delete[] node->getChildren();
     delete node;
-    node = NULL;
 }
 
 void Trie::add(std::string word) {
@@ -89,6 +87,10 @@ Node::Node() {
     children = new Node*[26];
 }
 Node::~Node() {
+}
+
+Node **Node::getChildren() {
+    return children;
 }
 
 int Node::getFrequency() {

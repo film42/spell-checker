@@ -14,6 +14,7 @@
 class Node {
     int frequency;
     int childCount;
+    Node **children;
 public:
     Node();
     ~Node();
@@ -21,7 +22,7 @@ public:
     int getChildCount();
     int getIndexOf(char letter);
     void incFrequency();
-    Node **children;
+    Node **getChildren();
     
     Node *getChild(char letter);
     void setChild(char letter, Node *node);
