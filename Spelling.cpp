@@ -78,14 +78,14 @@ std::string Spelling::toString() {
 std::string Spelling::filter(std::set<std::string> &suggestions) {
     if(suggestions.size() == 0) return NULL;
     
-    Node *topNode = NULL;
+    Trie::Node *topNode = NULL;
     std::string topString;
 
     std::set<std::string>::iterator it;
     for(it = suggestions.begin(); it != suggestions.end(); it++) {
         std::string word = *it;
         
-        Node* seek = dictionary->find(word);
+        Trie::Node* seek = dictionary->find(word);
         
         if(seek == NULL) continue;
         

@@ -11,29 +11,25 @@
 
 #include <iostream>
 
-class Node {
-    int frequency;
-    int childCount;
-    Node **children;
-public:
-    Node();
-    ~Node();
-    int getFrequency();
-    int getChildCount();
-    int getIndexOf(char letter);
-    void incFrequency();
-    Node **getChildren();
-    
-    Node *getChild(char letter);
-    void setChild(char letter, Node *node);
-};
-
 class Trie {
-    Node *head;
-    int nodeCount;
-    int wordCount;
-    void clear(Node *node);
 public:
+    class Node {
+        int frequency;
+        int childCount;
+        Node **children;
+    public:
+        Node();
+        ~Node();
+        int getFrequency();
+        int getChildCount();
+        int getIndexOf(char letter);
+        void incFrequency();
+        Node **getChildren();
+        
+        Node *getChild(char letter);
+        void setChild(char letter, Node *node);
+    };
+    
     Trie();
     ~Trie();
     void add(std::string word);
@@ -42,6 +38,11 @@ public:
     int getWordCount();
     int getNodeCount();
     
+private:
+    Node *head;
+    int nodeCount;
+    int wordCount;
+    void clear(Node *node);
 };
 
 #endif /* defined(__Playground1__Trie__) */

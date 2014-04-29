@@ -53,7 +53,7 @@ void Trie::add(std::string word) {
     wordCount++;
 }
 
-Node *Trie::find(std::string word) {
+Trie::Node *Trie::find(std::string word) {
     Node *state = head;
     
     for(int i = 0; i < word.length(); i++) {
@@ -83,38 +83,38 @@ int Trie::getWordCount() {
 //
 // ;; Node Class
 //
-Node::Node() {
+Trie::Node::Node() {
     children = new Node*[26];
 }
-Node::~Node() {
+Trie::Node::~Node() {
 }
 
-Node **Node::getChildren() {
+Trie::Node **Trie::Node::getChildren() {
     return children;
 }
 
-int Node::getFrequency() {
+int Trie::Node::getFrequency() {
     return frequency;
 }
 
-int Node::getChildCount() {
+int Trie::Node::getChildCount() {
     return childCount;
 }
 
-int Node::getIndexOf(char letter) {
+int Trie::Node::getIndexOf(char letter) {
     return letter - 'a';
 }
 
-void Node::incFrequency() {
+void Trie::Node::incFrequency() {
     frequency++;
 }
 
-Node * Node::getChild(char letter) {
+Trie::Node * Trie::Node::getChild(char letter) {
     int index = getIndexOf(letter);
     return children[index];
 }
 
-void Node::setChild(char letter, Node *node) {
+void Trie::Node::setChild(char letter, Node *node) {
     int index = getIndexOf(letter);
     children[index] = node;
     childCount++;
