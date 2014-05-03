@@ -18,6 +18,12 @@ int main(int argc, const char * argv[]) {
         return -1;
     }
     
+    // Return if word is too short
+    if(std::strlen(argv[2]) < 2) {
+        std::cout << argv[2] << std::endl;
+        return 0;
+    }
+    
     // Setup Spelling
     Spelling spelling;
     spelling.useDictionary(argv[1]);
