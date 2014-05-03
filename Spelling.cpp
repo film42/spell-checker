@@ -1,6 +1,6 @@
 //
 //  Spelling.cpp
-//  Playground1
+//  SpellChecker
 //
 //  Created by Garrett Thornburg on 4/27/14.
 //  Copyright (c) 2014 Garrett Thornburg. All rights reserved.
@@ -16,7 +16,7 @@ Spelling::~Spelling() {
     delete dictionary;
 }
 
-void Spelling::useDictionary(std::string fileName) {
+void Spelling::useDictionary(const std::string fileName) {
     std::string line = "";
     std::ifstream fin(fileName);
     while (std::getline(fin, line)) {
@@ -36,7 +36,7 @@ void Spelling::useDictionary(std::string fileName) {
     fin.close();
 }
 
-std::string Spelling::suggestSimilarWord(std::string inputWord) {
+std::string Spelling::suggestSimilarWord(const std::string inputWord) {
     
     if(dictionary->find(inputWord) != NULL)
         return inputWord;
@@ -49,20 +49,29 @@ std::string Spelling::suggestSimilarWord(std::string inputWord) {
     alterationDistance(similarWords, inputWord);
     insertionDistance(similarWords, inputWord);
     
+    // Copy
+    std::set<std::string> similarWordsCopy;
+    std::copy(similarWords.begin(), similarWords.end(), std::inserter(similarWordsCopy, similarWordsCopy.end()));
+    
     // Check First Pass
     std::string res = filter(similarWords);
     if(!res.empty()) return res;
     
     // Second Pass
-    deletionDistance(similarWords);
-    transpositionDistance(similarWords);
-    alterationDistance(similarWords);
-    insertionDistance(similarWords);
+    deletionDistance(similarWordsCopy, similarWords);
+
     
-    return filter(similarWords);
+    transpositionDistance(similarWordsCopy, similarWords);
+    alterationDistance(similarWordsCopy, similarWords);
+    insertionDistance(similarWordsCopy, similarWords);
+    
+    res = filter(similarWords);
+    
+    if(res.empty()) return inputWord;
+    return res;
 }
 
-std::string Spelling::toString() {
+std::string Spelling::toString() const {
     std::string out;
     out = "Nodes: ";
     out += std::to_string(dictionary->getNodeCount());
@@ -104,43 +113,47 @@ std::string Spelling::filter(std::set<std::string> &suggestions) {
     return topString;
 }
 
-void Spelling::deletionDistance(std::set<std::string> &acc, std::string word) {
+void Spelling::deletionDistance(std::set<std::string> &acc, const std::string word) {
     for(int i = 1; i <= word.length(); i++) {
         std::string base = word.substr(0,i-1);
         std::string tail = word.substr(i);
-        acc.insert(base + tail);
+        std::string cutlet = base + tail;
+        
+        if(!cutlet.empty())
+            acc.insert(cutlet);
     }
 }
 
-void Spelling::deletionDistance(std::set<std::string> &words) {
+void Spelling::deletionDistance(std::set<std::string> &copy, std::set<std::string> &words) {
     std::set<std::string>::iterator it;
-    for(it = words.begin(); it != words.end(); it++) {
+    for(it = copy.begin(); it != copy.end(); it++) {
         // Alter
         deletionDistance(words, *it);
     }
 }
 
-void Spelling::transpositionDistance(std::set<std::string> &acc, std::string word) {
+void Spelling::transpositionDistance(std::set<std::string> &acc, const std::string word) {
     for(int i = 0; i <= (word.length() - 2); i++) {
         std::string letterOne = word.substr(i, i+1);
         std::string letterTwo = word.substr(i+1, i+2);
         std::string firstHalf = word.substr(0, i);
         std::string lastHalf = word.substr(i+2);
         std::string cutlet = firstHalf + letterTwo + letterOne + lastHalf;
-        
-        acc.insert(cutlet);
+
+        if(!cutlet.empty())
+            acc.insert(cutlet);
     }
 }
 
-void Spelling::transpositionDistance(std::set<std::string> &words) {
+void Spelling::transpositionDistance(std::set<std::string> &copy, std::set<std::string> &words) {
     std::set<std::string>::iterator it;
-    for(it = words.begin(); it != words.end(); it++) {
+    for(it = copy.begin(); it != copy.end(); it++) {
         // Alter
         transpositionDistance(words, *it);
     }
 }
 
-void Spelling::alterationDistance(std::set<std::string> &acc, std::string word) {
+void Spelling::alterationDistance(std::set<std::string> &acc, const std::string word) {
     for(int i = 0; i <= (word.length() - 1); i++) {
         std::string firstHalf = word.substr(0, i);
         std::string lastHalf = word.substr(i+1);
@@ -148,21 +161,22 @@ void Spelling::alterationDistance(std::set<std::string> &acc, std::string word) 
         for(int y = 0; y < 26; y++) {
             char letter = (char)'a' + y;
             std::string cutlet = firstHalf + letter + lastHalf;
-            
-            acc.insert(cutlet);
+
+            if(!cutlet.empty())
+                acc.insert(cutlet);
         }
     }
 }
 
-void Spelling::alterationDistance(std::set<std::string> &words) {
+void Spelling::alterationDistance(std::set<std::string> &copy, std::set<std::string> &words) {
     std::set<std::string>::iterator it;
-    for(it = words.begin(); it != words.end(); it++) {
+    for(it = copy.begin(); it != copy.end(); it++) {
         // Alter
         alterationDistance(words, *it);
     }
 }
 
-void Spelling::insertionDistance(std::set<std::string> &acc, std::string word) {
+void Spelling::insertionDistance(std::set<std::string> &acc, const std::string word) {
     for(int i = 0; i <= word.length(); i++) {
         std::string firstHalf = word.substr(0, i);
         std::string lastHalf = word.substr(i);
@@ -170,15 +184,16 @@ void Spelling::insertionDistance(std::set<std::string> &acc, std::string word) {
         for(int y = 0; y < 26; y++) {
             char letter = (char)'a' + y;
             std::string cutlet = firstHalf + letter + lastHalf;
-            
-            acc.insert(cutlet);
+
+            if(!cutlet.empty())
+                acc.insert(cutlet);
         }
     }
 }
 
-void Spelling::insertionDistance(std::set<std::string> &words) {
+void Spelling::insertionDistance(std::set<std::string> &copy, std::set<std::string> &words) {
     std::set<std::string>::iterator it;
-    for(it = words.begin(); it != words.end(); it++) {
+    for(it = copy.begin(); it != copy.end(); it++) {
         // Alter
         insertionDistance(words, *it);
     }

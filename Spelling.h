@@ -1,13 +1,13 @@
 //
 //  Spelling.h
-//  Playground1
+//  SpellChecker
 //
 //  Created by Garrett Thornburg on 4/27/14.
 //  Copyright (c) 2014 Garrett Thornburg. All rights reserved.
 //
 
-#ifndef __Playground1__Spelling__
-#define __Playground1__Spelling__
+#ifndef __SpellChecker__Spelling__
+#define __SpellChecker__Spelling__
 
 #include <iostream>
 #include <fstream>
@@ -21,17 +21,17 @@ class Spelling: public ISpelling {
     
     std::string filter(std::set<std::string> &suggestions);
     
-    void deletionDistance(std::set<std::string> &acc, std::string word);
-    void deletionDistance(std::set<std::string> &words);
+    void deletionDistance(std::set<std::string> &acc, const std::string word);
+    void deletionDistance(std::set<std::string> &copy, std::set<std::string> &words);
     
-    void transpositionDistance(std::set<std::string> &acc, std::string word);
-    void transpositionDistance(std::set<std::string> &words);
+    void transpositionDistance(std::set<std::string> &acc, const std::string word);
+    void transpositionDistance(std::set<std::string> &copy, std::set<std::string> &words);
     
-    void alterationDistance(std::set<std::string> &acc, std::string word);
-    void alterationDistance(std::set<std::string> &words);
+    void alterationDistance(std::set<std::string> &acc, const std::string word);
+    void alterationDistance(std::set<std::string> &copy, std::set<std::string> &words);
     
-    void insertionDistance(std::set<std::string> &acc, std::string word);
-    void insertionDistance(std::set<std::string> &words);
+    void insertionDistance(std::set<std::string> &acc, const std::string word);
+    void insertionDistance(std::set<std::string> &copy, std::set<std::string> &words);
     
 public:
     Spelling();
@@ -39,9 +39,9 @@ public:
     
     void useDictionary(std::string fileName);
     
-    std::string suggestSimilarWord(std::string inputWord);
+    std::string suggestSimilarWord(const std::string inputWord);
     
-    std::string toString();
+    std::string toString() const;
 };
 
-#endif /* defined(__Playground1__Spelling__) */
+#endif /* defined(__SpellChecker__Spelling__) */

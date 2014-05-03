@@ -1,13 +1,13 @@
 //
 //  Trie.h
-//  Playground1
+//  SpellChecker
 //
 //  Created by Garrett Thornburg on 4/27/14.
 //  Copyright (c) 2014 Garrett Thornburg. All rights reserved.
 //
 
-#ifndef __Playground1__Trie__
-#define __Playground1__Trie__
+#ifndef __SpellChecker__Trie__
+#define __SpellChecker__Trie__
 
 #include <iostream>
 
@@ -20,23 +20,23 @@ public:
     public:
         Node();
         ~Node();
-        int getFrequency();
-        int getChildCount();
-        int getIndexOf(char letter);
+        int getFrequency() const;
+        int getChildCount() const;
+        int getIndexOf(const char letter) const;
         void incFrequency();
-        Node **getChildren();
+        Node **getChildren() const;
         
-        Node *getChild(char letter);
-        void setChild(char letter, Node *node);
+        Node *getChild(const char letter) const;
+        void setChild(const char letter, Node *node);
     };
     
     Trie();
     ~Trie();
-    void add(std::string word);
-    Node *find(std::string word);
+    void add(const std::string word);
+    Node *find(const std::string word) const;
     
-    int getWordCount();
-    int getNodeCount();
+    int getWordCount() const;
+    int getNodeCount() const;
     
 private:
     Node *head;
@@ -45,4 +45,4 @@ private:
     void clear(Node *node);
 };
 
-#endif /* defined(__Playground1__Trie__) */
+#endif /* defined(__SpellChecker__Trie__) */

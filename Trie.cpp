@@ -1,6 +1,6 @@
 //
 //  Trie.cpp
-//  Playground1
+//  SpellChecker
 //
 //  Created by Garrett Thornburg on 4/27/14.
 //  Copyright (c) 2014 Garrett Thornburg. All rights reserved.
@@ -28,7 +28,7 @@ void Trie::clear(Node *node) {
     delete node;
 }
 
-void Trie::add(std::string word) {
+void Trie::add(const std::string word) {
     
     Node *state = head;
     
@@ -53,7 +53,7 @@ void Trie::add(std::string word) {
     wordCount++;
 }
 
-Trie::Node *Trie::find(std::string word) {
+Trie::Node *Trie::find(const std::string word) const {
     Node *state = head;
     
     for(int i = 0; i < word.length(); i++) {
@@ -71,11 +71,11 @@ Trie::Node *Trie::find(std::string word) {
 //
 // Getters
 //
-int Trie::getNodeCount() {
+int Trie::getNodeCount() const {
     return nodeCount;
 }
 
-int Trie::getWordCount() {
+int Trie::getWordCount() const {
     return wordCount;
 }
 
@@ -89,19 +89,19 @@ Trie::Node::Node() {
 Trie::Node::~Node() {
 }
 
-Trie::Node **Trie::Node::getChildren() {
+Trie::Node **Trie::Node::getChildren() const {
     return children;
 }
 
-int Trie::Node::getFrequency() {
+int Trie::Node::getFrequency() const {
     return frequency;
 }
 
-int Trie::Node::getChildCount() {
+int Trie::Node::getChildCount() const {
     return childCount;
 }
 
-int Trie::Node::getIndexOf(char letter) {
+int Trie::Node::getIndexOf(char letter) const {
     return letter - 'a';
 }
 
@@ -109,12 +109,12 @@ void Trie::Node::incFrequency() {
     frequency++;
 }
 
-Trie::Node * Trie::Node::getChild(char letter) {
+Trie::Node * Trie::Node::getChild(const char letter) const {
     int index = getIndexOf(letter);
     return children[index];
 }
 
-void Trie::Node::setChild(char letter, Node *node) {
+void Trie::Node::setChild(const char letter, Node *node) {
     int index = getIndexOf(letter);
     children[index] = node;
     childCount++;
